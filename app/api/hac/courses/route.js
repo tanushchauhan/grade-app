@@ -252,7 +252,72 @@ export async function POST(req, res) {
           }
           return returnVal;
         });
+
+        for (let u = 0; u < storeData.length; u++) {
+          let theW;
+          if (!classes[storeData[u].courseCode]) {
+            theW = {
+              weight: 5.0,
+              multiplier: 1,
+            };
+          } else {
+            theW = classes[storeData[u].courseCode];
+          }
+          if (storeData[u].noWeight) {
+            storeData[u]["weightDetails"] = {
+              ...theW,
+              weight: 0,
+            };
+          } else {
+            storeData[u]["weightDetails"] = theW;
+          }
+        }
+
+        data[periodNumber] = {
+          periodNumber: String(i),
+          studentName,
+          data: storeData,
+        };
       }
+      await page.goto(
+        "https://hac.friscoisd.org/HomeAccess/Content/Student/Transcript.aspx"
+      );
+      await page.waitForSelector(".sg-transcript-group");
+      let transData = await page.evaluate(() => {
+        const x = document.querySelectorAll(".sg-transcript-group");
+        let y = {};
+        for (let i = 0; i < x.length; i++) {
+          const oTable = x[i].querySelector("table");
+          let transPerGradeData = [...oTable.rows].map((t) =>
+            [...t.children].map((u) => u.innerText)
+          );
+
+          const oTable2 = x[i].querySelector(".sg-asp-table");
+          let transPerGradeData2 = [...oTable2.rows].map((t) =>
+            [...t.children].map((u) => u.innerText)
+          );
+
+          y[`${i + 1}`] = { transPerGradeData, transPerGradeData2 };
+        }
+
+        const oTable = document.querySelector(
+          "#plnMain_rpTranscriptGroup_tblCumGPAInfo"
+        );
+
+        let transPerRankData = [...oTable.rows].map((t) =>
+          [...t.children].map((u) => u.innerText)
+        );
+        y = { ...y, transPerRankData };
+        return y;
+      });
+
+      return Response.json({
+        success: true,
+        data,
+        transData,
+        studentName,
+        periodNumber,
+      });
     }
   } catch (e) {
     if (
