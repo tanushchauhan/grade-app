@@ -54,4 +54,58 @@ export async function POST(req, res) {
       periodNumber,
     });
   }
+
+  let storeData;
+  let studentName;
+  const url = "https://hac.friscoisd.org/homeaccess/";
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  try {
+    await page.setUserAgent(
+      "Mozilla/5.0 (X11; Linux x86_64)" +
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36"
+    );
+    await page.goto(url);
+    await page.evaluate(
+      (username, password) => {
+        document.querySelector("#LogOnDetails_UserName").value = username;
+        document.querySelector("#LogOnDetails_Password").value = password;
+      },
+      username,
+      password
+    );
+    await page.click(".sg-submit-button");
+    await page.waitForSelector(
+      ".sg-banner-menu-element.sg-menu-element-identity",
+      { timeout: 5000 }
+    );
+    studentName = await page.evaluate(() => {
+      return document
+        .querySelector(".sg-banner-menu-element.sg-menu-element-identity")
+        .querySelector("span").textContent;
+    });
+
+    await page.goto(
+      "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx"
+    );
+  } catch (e) {
+    if (
+      await page.evaluate(() => {
+        try {
+          return document.querySelector(".validation-summary-errors").outerHTML;
+        } catch {
+          return undefined;
+        }
+      })
+    ) {
+      return Response.json({ success: false, wrongPas: true });
+    } else {
+      console.log(e);
+    }
+    return Response.json({ success: false, wrongPas: false });
+  } finally {
+    await page.goto("https://hac.friscoisd.org/HomeAccess/Account/Logoff");
+    await page.waitForSelector(".caption");
+    await browser.close();
+  }
 }
