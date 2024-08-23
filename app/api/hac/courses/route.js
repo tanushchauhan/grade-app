@@ -88,6 +88,79 @@ export async function POST(req, res) {
     await page.goto(
       "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx"
     );
+
+    if (options.onlyPeriod) {
+      await page.evaluate(
+        (periodNumber) =>
+          (document.getElementById("plnMain_ddlReportCardRuns").selectedIndex =
+            periodNumber),
+        options.periodNumber
+      );
+      await Promise.all([
+        page.click("#plnMain_btnRefreshView"),
+        page.waitForNavigation({ waitUntil: "networkidle2" }),
+      ]);
+      periodNumber = await page.evaluate(
+        () =>
+          document
+            .querySelector("#combobox_plnMain_ddlReportCardRuns")
+            .querySelector(".sg-combobox-input.ui-autocomplete-input").value
+      );
+      data = await page.evaluate(() => {
+        const list = document.querySelectorAll(".AssignmentClass");
+        let returnVal = [];
+        let courseName, studentGrade;
+        for (let i = 0; i < list.length; i++) {
+          courseName = list[i]
+            .querySelector(".sg-header-heading")
+            .textContent.trim()
+            .substring(17);
+          courseName = courseName.substring(0, courseName.length - 3);
+          courseCode = list[i]
+            .querySelector(".sg-header-heading")
+            .textContent.trim()
+            .substring(0, 8);
+          studentGrade = list[i]
+            .querySelector(".sg-header-heading.sg-right")
+            .textContent.trim()
+            .substring(15);
+          let assignmentData,
+            noWeight = false;
+          try {
+            studentGrade = studentGrade.substring(0, studentGrade.length - 1);
+            studentGrade = Number(studentGrade);
+            const oTable = list[i].querySelector(".sg-asp-table");
+
+            assignmentData = [...oTable.rows].map((t) =>
+              [...t.children].map((u) => u.innerText)
+            );
+            noWeight = true;
+
+            for (let op = 1; op < assignmentData.length; op++) {
+              if (
+                assignmentData[op][3] === "Assessment of Learning" &&
+                assignmentData[op][4] !== ""
+              ) {
+                noWeight = false;
+              }
+            }
+          } catch {
+            studentGrade = 0.0;
+            assignmentData = {};
+            noWeight = true;
+          } finally {
+            returnVal.push({
+              courseCode,
+              courseName,
+              studentGrade,
+              assignmentData,
+              noWeight,
+            });
+          }
+        }
+        return returnVal;
+      });
+    }
   } catch (e) {
     if (
       await page.evaluate(() => {
