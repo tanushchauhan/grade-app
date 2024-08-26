@@ -1684,6 +1684,516 @@ const classes = {
     weight: 5.0,
     multiplier: 1,
   },
+  SUBA1201: {
+    name: "Basketball Girls 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1202: {
+    name: "Basketball Girls 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1203: {
+    name: "Basketball Girls 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1204: {
+    name: "Basketball Girls 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1301: {
+    name: "Football 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1302: {
+    name: "Football 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1303: {
+    name: "Football 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1304: {
+    name: "Football 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1401: {
+    name: "Varsity Golf 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1402: {
+    name: "Varsity Golf 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1403: {
+    name: "Varsity Golf 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1404: {
+    name: "Varsity Golf 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1411: {
+    name: "JV Golf 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1412: {
+    name: "JV Golf 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1413: {
+    name: "JV Golf 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1501: {
+    name: "Soccer 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1502: {
+    name: "Soccer 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1503: {
+    name: "Soccer 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1504: {
+    name: "Soccer 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1601: {
+    name: "Soccer Girls 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1602: {
+    name: "Soccer Girls 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1603: {
+    name: "Soccer Girls 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1604: {
+    name: "Soccer Girls 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1701: {
+    name: "Softball 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1702: {
+    name: "Softball 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1703: {
+    name: "Softball 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1704: {
+    name: "Softball 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1801: {
+    name: "Varsity Swimming 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1802: {
+    name: "Varsity Swimming 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1803: {
+    name: "Varsity Swimming 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1804: {
+    name: "Varsity Swimming 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1811: {
+    name: "JV Swimming 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1812: {
+    name: "JV Swimming 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1813: {
+    name: "JV Swimming 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1814: {
+    name: "JV Swimming 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1901: {
+    name: "Varsity Tennis 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1902: {
+    name: "Varsity Tennis 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1903: {
+    name: "Varsity Tennis 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1904: {
+    name: "Varsity Tennis 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1911: {
+    name: "JV Tennis 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1912: {
+    name: "JV Tennis 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1913: {
+    name: "JV Tennis 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA1914: {
+    name: "JV Tennis 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2001: {
+    name: "Track Boys 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2002: {
+    name: "Track Boys 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2003: {
+    name: "Track Boys 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2004: {
+    name: "Track Boys 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2101: {
+    name: "Track Girls 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2102: {
+    name: "Track Girls 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2103: {
+    name: "Track Girls 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2104: {
+    name: "Track Girls 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2305N: {
+    name: "Volleyball NC",
+    weight: 0,
+    multiplier: 0,
+  },
+  SUBA2401: {
+    name: "Wrestling Boys 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2402: {
+    name: "Wrestling Boys 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2403: {
+    name: "Wrestling Boys 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2404: {
+    name: "Wrestling Boys 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2501: {
+    name: "Wrestling Girls 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2502: {
+    name: "Wrestling Girls 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2503: {
+    name: "Wrestling Girls 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2504: {
+    name: "Wrestling Girls 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2601: {
+    name: "Power Lifting 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2602: {
+    name: "Power Lifting 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2603: {
+    name: "Power Lifting 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2604: {
+    name: "Power Lifting 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2701: {
+    name: "Cross Country 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2702: {
+    name: "Cross Country 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2703: {
+    name: "Cross Country 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2704: {
+    name: "Cross Country 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2801: {
+    name: "Diving 1 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2802: {
+    name: "Diving 1 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2803: {
+    name: "Diving 1 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2804: {
+    name: "Diving 1 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2901: {
+    name: "Diving 2 9th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2902: {
+    name: "Diving 2 10th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2903: {
+    name: "Diving 2 11th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA2904: {
+    name: "Diving 2 12th Grade",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA3000: {
+    name: "Athletic Trainer",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  SUBA3001N: {
+    name: "Off Campus PE",
+    weight: 0,
+    multiplier: 0,
+  },
+  TEC21100: {
+    name: "Computer Science 1",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  TEC21200: {
+    name: "Computer Science 1 Advanced",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  TEC21250: {
+    name: "AP Computer Science Principles",
+    weight: 6.0,
+    multiplier: 1,
+  },
+  TEC21300: {
+    name: "AP Computer Science A",
+    weight: 6.0,
+    multiplier: 2,
+  },
+  TEC22200: {
+    name: "Computer Science 3 Adv",
+    weight: 6.0,
+    multiplier: 1,
+  },
+  TEC22400: {
+    name: "3D Modeling & Animation",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  UNT13101: {
+    name: "UNT Now! Dual Credit English 3 - Sem 1/2",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13110: {
+    name: "UNT Online Dual Credit English 3 - Sem 1/2",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13201: {
+    name: "UNT Now! Dual Credit US History 1/2",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13301: {
+    name: "UNT Now! Dual Credit US Government",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13310: {
+    name: "UNT Online Dual Credit US Government",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13501: {
+    name: "UNT Now! Dual Credit Texas Government",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13601: {
+    name: "UNT Now! Dual Credit Art Appreciation",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13701: {
+    name: "UNT Now! Dual Credit Intro to Communication",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13902: {
+    name: "UNT Now! Dual Credit English 4 - Sem 1/2",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13910: {
+    name: "UNT Online Dual Credit English - Year 2- Sem 1/2",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT13920: {
+    name: "UNT Online Dual Credit English 4 - Sem 1/2",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14002: {
+    name: "UNT Now! Dual Credit Microeconomics",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14010: {
+    name: "UNT Online Dual Credit Microeconomics",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14102: {
+    name: "UNT Now! Dual Credit Statistics",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14201: {
+    name: "UNT Now! Dual Credit Environmental Science",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14301: {
+    name: "UNT Now! Dual Credit Earth Science",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14302: {
+    name: "UNT Now! Dual Credit Earth Science",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  UNT14401: {
+    name: "UNT Online Education Field of Study",
+    weight: 5.5,
+    multiplier: 1,
+  },
 };
 
 export async function GET() {
@@ -1769,7 +2279,6 @@ export async function POST(req, res) {
     await page.goto(
       "https://hac.friscoisd.org/HomeAccess/Content/Student/Assignments.aspx"
     );
-
     if (options.onlyPeriod) {
       await page.evaluate(
         (periodNumber) =>
