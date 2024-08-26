@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { globalContext } from "@/app/providers";
 
 function AssignmentItem({
   data,
@@ -164,6 +165,7 @@ function Com({ params }) {
   const [whatIFStatus, setWhatIFStatus] = useState(false);
 
   function calculateOverAll() {
+    let studentOverallGrade;
     try {
       const count = allData?.assignmentData?.filter((e) => {
         if (e[3] === "Assessment of Learning") {
@@ -181,22 +183,136 @@ function Com({ params }) {
         }
       }).length;
 
-      const sum = allData?.assignmentData.filter((e) => {
-        if (e[3] === "Assessment of Learning") {
-          if (e[4].trim() === "") {
-            return false;
-          } else if (e[4] === "L" || Number(e[4]) === 0) {
-            return true;
-          } else if (!Number(e[4])) {
-            return false;
+      const sum = allData?.assignmentData
+        .filter((e) => {
+          if (e[3] === "Assessment of Learning") {
+            if (e[4].trim() === "") {
+              return false;
+            } else if (e[4] === "L" || Number(e[4]) === 0) {
+              return true;
+            } else if (!Number(e[4])) {
+              return false;
+            } else {
+              return true;
+            }
           } else {
-            return true;
+            return false;
           }
-        } else {
-          return false;
+        })
+        .reduce((acc, e) => {
+          if (!Number(e[4]) && Number(e[4]) !== 0) {
+            return acc;
+          } else {
+            return acc + Number(e[4]);
+          }
+        }, 0);
+
+      studentOverallGrade =
+        Math.round((sum / count + Number.EPSILON) * 100) / 100;
+      if (!studentOverallGrade) {
+        studentOverallGrade = 0;
+      }
+    } catch (e) {
+      studentOverallGrade = 0;
+    }
+    return studentOverallGrade;
+  }
+
+  const [per, setPer] = useState(calculateOverAll());
+
+  const [assignmentsAdded, setAssignmentsAdded] = useState(0);
+
+  useEffect(() => {
+    function calculateOverAllAndUpdate() {
+      let studentOverallGrade;
+      try {
+        const count = allData?.assignmentData?.filter((e) => {
+          if (e[3] === "Assessment of Learning") {
+            if (e[4].trim() === "") {
+              return false;
+            } else if (e[4] === "L" || Number(e[4]) === 0) {
+              return true;
+            } else if (!Number(e[4])) {
+              return false;
+            } else {
+              return true;
+            }
+          } else {
+            return false;
+          }
+        }).length;
+
+        const sum = allData?.assignmentData
+          .filter((e) => {
+            if (e[3] === "Assessment of Learning") {
+              if (e[4].trim() === "") {
+                return false;
+              } else if (e[4] === "L" || Number(e[4]) === 0) {
+                return true;
+              } else if (!Number(e[4])) {
+                return false;
+              } else {
+                return true;
+              }
+            } else {
+              return false;
+            }
+          })
+          .reduce((acc, e) => {
+            if (!Number(e[4]) && Number(e[4]) !== 0) {
+              return acc;
+            } else {
+              return acc + Number(e[4]);
+            }
+          }, 0);
+
+        studentOverallGrade =
+          Math.round((sum / count + Number.EPSILON) * 100) / 100;
+        if (!studentOverallGrade) {
+          studentOverallGrade = 0;
         }
-      });
-    } catch {}
+      } catch (e) {
+        console.error(e);
+        console.log(allData);
+        studentOverallGrade = 0;
+      }
+      setPer(studentOverallGrade);
+    }
+    calculateOverAllAndUpdate();
+  }, [allData]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  function updateModalStatus(status, id) {
+    document.querySelector("html").classList.toggle("overflow-hidden");
+
+    if (status) {
+      setModalData(data.assignmentData[id + 1]);
+    }
+    setShowModal(status);
+  }
+
+  function addNewAOL() {
+    setAllData((e) => {
+      e.assignmentData.splice(1, 0, [
+        "Today",
+        "Today",
+        "New Assignment",
+        "Assessment of Learning",
+        "",
+        "100.00",
+        "1.00",
+        " ",
+        "100.00",
+        " ",
+        Date.now(),
+      ]);
+
+      return e;
+    });
+    setAssignmentsAdded((e) => e + 1);
   }
 
   return <div></div>;
