@@ -5,6 +5,659 @@ import NodeRSA from "node-rsa";
 import { demoData, demoTransData } from "./demoData";
 const fs = require("fs");
 
+const classes = {
+  CATE00210: {
+    name: "Survey of Agriculture Food & Natural Resources",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00310: {
+    name: "Livestock Production",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00400: {
+    name: "Small Animal Management",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00415: {
+    name: "Small Animal Management@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00500: {
+    name: "Equine Science",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00600: {
+    name: "Veterinary Medical Applications@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00700: {
+    name: "Animal Science@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE00810: {
+    name: "Plant Soil Science@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE01510: {
+    name: "Wildlife, Fisheries, & Ecology Management",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE01800: {
+    name: "Floral Design 1",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE01900: {
+    name: "Landscape Design & Management@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02010: {
+    name: "Horticulture Science@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02200: {
+    name: "Agricultural Mechanics, & Metal Technologies",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02350: {
+    name: "Agricultural Structrures Design & Fabrications",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02500: {
+    name: "Practicum in Agricultural Structures & Equipment@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE02503: {
+    name: "Practicum in Veterinary Medical Applications@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE02505: {
+    name: "Floral Design 2@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02600: {
+    name: "Greenhouse Operation & Production@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02700: {
+    name: "Agricultural Equipment Design & Fabrication@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02803: {
+    name: "Internetworking I (CISCO 1)@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE02900: {
+    name: "Cybersecurity@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE03742: {
+    name: "PLTW Intro to Engineering Design@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE03743: {
+    name: "PLTW Principles of Engineering@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE03744: {
+    name: "PLTW Digital Electronics@CTEC",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  CATE03745: {
+    name: "PLTW Aerospace Engineering@CTEC",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  CATE03747: {
+    name: "PLTW Civil Engineering & Architecture@CTEC",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  CATE03749: {
+    name: "PLTW Engineering Design and Development@CTEC",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  CATE03755: {
+    name: "Engineering Design and Development Plus @ CTEC",
+    weight: 5.5,
+    multiplier: 2,
+  },
+  CATE04210: {
+    name: "Architecture & Construction I@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE04300: {
+    name: "Interior Design I",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE04600: {
+    name: "Architectural Design I@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE04710: {
+    name: "Architectural Design II@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE08360: {
+    name: "Animation I@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE08450: {
+    name: "Practicum in Animation@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE08460: {
+    name: "Animation II@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE08500: {
+    name: "Audio/Video Production I",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE08600: {
+    name: "Audio/Video Production II",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE08860: {
+    name: "Graphic Design & Illustration I@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE08960: {
+    name: "Graphic Design & Illustration II@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE09000: {
+    name: "Practicum in Graphic Design & Illustration@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE09300: {
+    name: "Fashion Design I",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE09400: {
+    name: "Fashion Design II",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE11210: {
+    name: "Survey of Business, Marketing and Finance",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE11300: {
+    name: "Touch System Data Entry",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE11400: {
+    name: "Business Information Management I",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE11500: {
+    name: "Business Information Management II@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE11710: {
+    name: "Business Law",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE11800: {
+    name: "Global Business",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE14215: {
+    name: "Survey of Education & Training",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE14400: {
+    name: "Education & Training@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE14500: {
+    name: "Practicum in Education and Training@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE15100: {
+    name: "Esports I",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE15200: {
+    name: "Esports II",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE15300: {
+    name: "Esports III@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE16210: {
+    name: "Money Matters Yr@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE16300: {
+    name: "Banking & Financial Services",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE16410: {
+    name: "Securities & Investment@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE16600: {
+    name: "Accounting I",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE16700: {
+    name: "Accounting II",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE18210: {
+    name: "Survey of Government & Public Administration@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE18300: {
+    name: "Political Science@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE18320: {
+    name: "Competitive Trial Advocacy@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE18350: {
+    name: "Mock Trial Yr@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE18400: {
+    name: "Practium in Government@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE18500: {
+    name: "Foreign Services and Diplomacy@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE20200: {
+    name: "Health Science",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE20310: {
+    name: "Medical Terminology",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE21000: {
+    name: "Future Ready Health Care@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE22300: {
+    name: "Hotel Management Yr@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE22410: {
+    name: "Survey of Hospitality & Tourism",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE22510: {
+    name: "Travel & Tourism Management",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE22600: {
+    name: "Culinary Arts I@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE22610: {
+    name: "Culinary Arts II@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE22810: {
+    name: "Hospitality Services@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE22900: {
+    name: "Practicum in Hospitatliy Services@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE23000: {
+    name: "Food Science",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE24300: {
+    name: "Dollars & Sense",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE24400: {
+    name: "Interpersonal Studies",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE24500: {
+    name: "Introduction to Culinary Arts",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE24710: {
+    name: "Child Development Yr",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE24800: {
+    name: "Child Guidance Yr@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE25001: {
+    name: "Practicum in Child Guidance@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE27200: {
+    name: "Survey of Information Technology",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE27300: {
+    name: "Computer Maintenance",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE27600: {
+    name: "Mobile App Programming Yr@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE27700: {
+    name: "Video Game Programming I@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE27800: {
+    name: "Digital Media",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE27900: {
+    name: "Web Design Yr@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE28700: {
+    name: "Video Game Programming II@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE28800: {
+    name: "Video Game Programming III@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE29210: {
+    name: "Survey of Law, Public Safety, Corrections & Security",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE29300: {
+    name: "Law Enforcement I@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE29350: {
+    name: "Law Enforcement II@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE29500: {
+    name: "Forensic Science Yr@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE29600: {
+    name: "Court Systems and Practices@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34100: {
+    name: "Social Media Marketing",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34250: {
+    name: "Advertising",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34310: {
+    name: "Fashion Marketing",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34400: {
+    name: "Entrepreneurship",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34450: {
+    name: "ACCELeratoredu",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34610: {
+    name: "Sports & Entertainment Marketing",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE34710: {
+    name: "Practicum in Marketing II",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE34711: {
+    name: "Practicum in Marketing I",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE34750: {
+    name: "Sports Management @WHS",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE35100: {
+    name: "Practicum in Sports Broadcasting I@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE35200: {
+    name: "Practicum in Sports Broadcasting II@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE36100: {
+    name: "Architecture & Construction II@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE36200: {
+    name: "Introduction to Welding@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CATE36300: {
+    name: "Practicum in News Production I",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE36400: {
+    name: "Practicum in News Production II",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CATE36600: {
+    name: "Practicum in Information Technology@CTEC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  CMR00110: {
+    name: "Naval Science 1",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CMR00120: {
+    name: "Naval Science 2",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CMR00130: {
+    name: "Naval Science 3",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  CMR00140: {
+    name: "Naval Science 4",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  COL02820: {
+    name: "Internetworking II (CISCO 2-3)",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  COL04000: {
+    name: "Health Science Clinical",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  COL04100: {
+    name: "Practicum in Health Science",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  COL04200: {
+    name: "Rehabilitation Aide",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  COL04300: {
+    name: "Medical Scribe",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  COL04570: {
+    name: "Pharmacy Technician",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  COL36600: {
+    name: "Emergency Medical Technician@CC",
+    weight: 5.0,
+    multiplier: 2,
+  },
+  COL36700: {
+    name: "Baking Pastry S1@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  COL36701: {
+    name: "Baking Pastry LC S1@CTEC",
+    weight: 5.0,
+    multiplier: 1,
+  },
+  COLM0200: {
+    name: "Collin Dual Credit English 3",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  COLM0210: {
+    name: "Collin Dual Credit Literature for Seniors",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  COLM0220: {
+    name: "Collin Dual Credit Composition for Seniors",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  COLM0300: {
+    name: "Collin Dual Credit Art Appreciation",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  COLM0410: {
+    name: "Collin Dual Credit Statistics",
+    weight: 5.5,
+    multiplier: 1,
+  },
+  COLM0420: {
+    name: "Collin Dual Credit College Algebra",
+    weight: 5.5,
+    multiplier: 1,
+  },
+};
+
 export async function GET() {
   return Response.json({ success: false, error: "Invaild method" });
 }
