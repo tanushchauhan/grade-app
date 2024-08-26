@@ -318,7 +318,100 @@ export async function POST(req, res) {
         studentName,
         periodNumber,
       });
+    } else {
+      fs.appendFileSync(
+        ".logs/log.txt",
+        `${username} logged in - ${studentName}\n`
+      );
+
+      await page.waitForSelector(".AssignmentClass");
+      periodNumber = await page.evaluate(
+        () =>
+          document
+            .querySelector("#combobox_plnMain_ddlReportCardRuns")
+            .querySelector(".sg-combobox-input.ui-autocomplete-input").value
+      );
+      data = await page.evaluate(() => {
+        const list = document.querySelectorAll(".AssignmentClass");
+        let returnVal = [];
+        let courseName, studentGrade, courseCode;
+        for (let i = 0; i < list.length; i++) {
+          courseName = list[i]
+            .querySelector(".sg-header-heading")
+            .textContent.trim()
+            .substring(17);
+          courseName = courseName.substring(0, courseName.length - 3);
+          courseCode = list[i]
+            .querySelector(".sg-header-heading")
+            .textContent.trim()
+            .substring(0, 8);
+          studentGrade = list[i]
+            .querySelector(".sg-header-heading.sg-right")
+            .textContent.trim()
+            .substring(15);
+          studentGrade = studentGrade.substring(0, studentGrade.length - 1);
+          studentGrade = Number(studentGrade);
+          const oTable = list[i].querySelector(".sg-asp-table");
+          //rows becomes undefined when the marking period has nothing.
+          let assignmentData,
+            noWeight = false;
+          try {
+            assignmentData = [...oTable.rows].map((t) =>
+              [...t.children].map((u) => u.innerText)
+            );
+            noWeight = true;
+
+            for (let op = 1; op < assignmentData.length; op++) {
+              if (
+                assignmentData[op][3] === "Assessment of Learning" &&
+                assignmentData[op][4] !== ""
+              ) {
+                noWeight = false;
+              }
+            }
+          } catch {
+            studentGrade = 0.0;
+            assignmentData = {};
+            noWeight = true;
+          } finally {
+            returnVal.push({
+              courseCode,
+              courseName,
+              studentGrade,
+              assignmentData,
+              noWeight,
+            });
+          }
+        }
+        return returnVal;
+      });
+
+      for (let u = 0; u < data.length; u++) {
+        let theW;
+        if (!classes[data[u].courseCode]) {
+          theW = {
+            weight: 5.0,
+            multiplier: 1,
+          };
+        } else {
+          theW = classes[data[u].courseCode];
+        }
+        if (data[u].noWeight) {
+          data[u]["weightDetails"] = {
+            ...theW,
+            weight: 0,
+          };
+        } else {
+          data[u]["weightDetails"] = theW;
+        }
+      }
     }
+    return Response.json({
+      success: true,
+      data,
+      studentName,
+      periodNumber,
+    });
   } catch (e) {
     if (
       await page.evaluate(() => {
