@@ -1,3 +1,5 @@
+import { useContext, useEffect, useRef, useState } from "react";
+
 function AssignmentItem({
   data,
   updateModalStatus,
@@ -138,3 +140,66 @@ function AssignmentItem({
     </div>
   );
 }
+
+function Com({ params }) {
+  const { updateChangeTheHeader } = useContext(globalContext);
+
+  let store =
+    typeof window !== "undefined"
+      ? JSON.parse(sessionStorage.getItem("data"))
+      : null;
+  const perNum = Number(params.id.substring(params.id.length - 1));
+  const code = params.id.substring(0, params.id.length - 1);
+  let data;
+  try {
+    data = store[perNum].data.filter((e) => e.courseCode === code)[0];
+  } catch {
+    data = null;
+  }
+
+  const [allData, setAllData] = useState(data);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [whatIFStatus, setWhatIFStatus] = useState(false);
+
+  function calculateOverAll() {
+    try {
+      const count = allData?.assignmentData?.filter((e) => {
+        if (e[3] === "Assessment of Learning") {
+          if (e[4].trim() === "") {
+            return false;
+          } else if (e[4] === "L" || Number(e[4]) === 0) {
+            return true;
+          } else if (!Number(e[4])) {
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      }).length;
+
+      const sum = allData?.assignmentData.filter((e) => {
+        if (e[3] === "Assessment of Learning") {
+          if (e[4].trim() === "") {
+            return false;
+          } else if (e[4] === "L" || Number(e[4]) === 0) {
+            return true;
+          } else if (!Number(e[4])) {
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      });
+    } catch {}
+  }
+
+  return <div></div>;
+}
+
+export default Com;
