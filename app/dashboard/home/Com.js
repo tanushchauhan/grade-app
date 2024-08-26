@@ -6,6 +6,62 @@ function AssignmentItem({
   allData,
   setAllData,
 }) {
+  const [inputData, setInputData] = useState(
+    Number(data[4]) ? Number(data[4]) : data[4]
+  );
+  const [showTitleAsInput, setShowTitleAsInput] = useState(false);
+  const [titleValAtWhatIF, setTitleValAtWhatIF] = useState(data[2]);
+  function handleClick(e) {
+    if (e.target.id === "noClick") {
+      return;
+    } else if (e.target.id === "noClickAtWhatIF") {
+      if (whatIF) return;
+      else {
+        updateModalStatus(true, id);
+      }
+    } else {
+      updateModalStatus(true, id);
+    }
+  }
+  useEffect(() => {
+    if (
+      !whatIF &&
+      inputData !== (Number(data[4]) ? Number(data[4]) : data[4])
+    ) {
+      setInputData(Number(data[4]) ? Number(data[4]) : data[4]);
+    }
+
+    if (!whatIF && titleValAtWhatIF !== data[2]) {
+      setTitleValAtWhatIF(data[2]);
+    }
+  }, [whatIF, data, inputData, titleValAtWhatIF]);
+
+  function handleChange(e) {
+    if (
+      !Number(e.target.value) &&
+      e.target.value !== "" &&
+      e.target.value !== "L" &&
+      Number(e.target.value) !== 0
+    ) {
+      return;
+    }
+    if (Number(e.target.value) > 999 || e.target.value.length > 3) {
+      return;
+    }
+    let assignmentData = JSON.parse(JSON.stringify(allData.assignmentData));
+    assignmentData[id + 1][4] = e.target.value;
+    setAllData((f) => {
+      return { ...f, assignmentData };
+    });
+    setInputData(e.target.value);
+  }
+
+  function handleWhatIFTextClick() {
+    if (!whatIF) return;
+
+    setShowTitleAsInput(true);
+  }
+
   return (
     <div
       className="grid grid-cols-1 items-center justify-items-center xl:justify-items-start xl:grid-cols-[30%_1fr_1fr] p-4 gap-y-4 cursor-pointer font-bold rounded-xl text-slate-800 dark:text-slate-200 border-4"
