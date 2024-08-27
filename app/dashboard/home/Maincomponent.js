@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
+import Loader from "@/components/ui/Loader";
+import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { motion } from "framer-motion";
 
 function GradeCard({ data, periodNumber, setCurrentView }) {
   const router = useRouter();
@@ -198,7 +201,108 @@ function Maincomponent() {
     }
   }
 
-  return <div></div>;
+  async function mainRefetch() {
+    if (mainReloadBtn) return;
+    if (!isLoading) setIsLoading(true);
+    const options = { onlyPeriod: false, periodNumNeeded: null };
+    const token = getCookie("token");
+    const dataToSend = { token, options };
+    const res = await fetch("/api/hac/courses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
+    });
+
+    try {
+      let data = await res.json();
+      if (!data.success) {
+        deleteCookie("token");
+        console.error("API server down!");
+        router.push("/signin");
+        return;
+      } else {
+        const perNum = data.periodNumber;
+        const dataToStore = {};
+        dataToStore[`${perNum}`] = data;
+        sessionStorage.setItem(`data`, JSON.stringify(dataToStore));
+        sessionStorage.setItem("currPeriod", perNum);
+        sessionStorage.setItem("perCurrPeriod", perNum);
+        updateChangeTheHeader(true);
+        let initialData = {};
+        let initialPeriod;
+        initialData = JSON.parse(sessionStorage.getItem(`data`));
+        initialPeriod = sessionStorage.getItem("currPeriod");
+        setCurrentData(initialData[initialPeriod]);
+        setIsLoading(false);
+        setMainReloadBtn(false);
+        return;
+      }
+    } catch (e) {
+      console.error(e);
+      deleteCookie("token");
+      router.push("/signin");
+      return;
+    }
+  }
+
+  async function handleChange(e) {
+    if (e.target.value === currentData.periodNumber) return;
+    const value = e.target.value;
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("currPeriod", value);
+    }
+    setIsLoading(true);
+    const currData =
+      typeof window !== "undefined"
+        ? JSON.parse(sessionStorage.getItem(`data`))
+        : null;
+    if (currData[value]) {
+      setCurrentData(currData[value]);
+      setIsLoading(false);
+      return;
+    }
+    const token = getCookie("token");
+
+    const dataToSend = {
+      token,
+      options: { onlyPeriod: true, periodNumber: value },
+    };
+    const res = await fetch("/api/hac/courses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
+    });
+    try {
+      const resData = await res.json();
+      const preNum = resData.periodNumber;
+      const currData =
+        typeof window !== "undefined"
+          ? JSON.parse(sessionStorage.getItem("data"))
+          : null;
+      currData[`${preNum}`] = resData;
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("data", JSON.stringify(currData));
+      }
+      setCurrentData(resData);
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+      router.push("/error");
+    }
+  }
+
+  if (!hasCookie("token") || loading) {
+    return <Loader />;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ ease: "easeInOut", duration: 0.75 }}
+    ></motion.div>
+  );
 }
 
 export default Maincomponent;
