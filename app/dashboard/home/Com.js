@@ -1,13 +1,8 @@
 "use client";
 
 import { globalContext } from "@/app/providers";
-import ThemeToggler from "@/components/Header/ThemeToggler";
-import { deleteCookie } from "cookies-next";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
   CircularProgressbarWithChildren,
@@ -548,6 +543,96 @@ function Com({ params }) {
           </span>
         </div>
       </section>
+      <div className="grid grid-cols-1 xl:grid-cols-[30%_1fr] gap-x-10 container">
+        <section className="overflow-hidden mt-10 container mb-10">
+          <div className="grid grid-cols-1 gap-y-16 max-w-96 mx-auto">
+            <CircularProgressbarWithChildren
+              value={per}
+              styles={buildStyles({
+                pathColor: `#4A6CF7`,
+                trailColor: "#d6d6d6",
+              })}
+            >
+              <div className="text-5xl bg-gradient-to-r from-blue-600 dark:via-indigo-300 via-indigo-900 dark:to-[#4A6CF7] to-[#4A6CF7] inline-block text-transparent bg-clip-text font-bold">
+                {per}%
+              </div>
+            </CircularProgressbarWithChildren>
+            <div className="flex flex-col items-center justify-center">
+              <h2 className="text-4xl text-center">{data?.courseName}</h2>
+              <h3 className="text-3xl mt-5 text-slate-500">Period: {perNum}</h3>
+              <div className="grid grid-rows-2 items-start justify-items-start">
+                <div className="flex gap-2 items-center justify-center mt-5">
+                  <div className="inline-block w-8 h-8 border-indigo-600/60 border-4"></div>
+                  <span className="text-md dark:text-slate-300 text-slate-600">
+                    {" "}
+                    - Assessment of Learning
+                  </span>
+                </div>
+                <div className="flex gap-2 items-center justify-center mt-5">
+                  <div className="inline-block w-8 h-8 border-cyan-600/60 border-4"></div>
+                  <span className="text-md dark:text-slate-300 text-slate-600">
+                    {" "}
+                    - Progress Check for Learning
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="container mb-10 dark:bg-slate-800 bg-gray-light py-10">
+          <p className="text-xl mb-11 dark:text-slate-400 text-slate-600 font-semibold text-center">
+            Click on each assignment for more details.
+          </p>
+          <div className="w-full flex items-center justify-center">
+            <button
+              className="mb-10 text-xl bg-primary px-4 py-2 rounded-3xl hover:bg-blue-800 transition-all duration-300 active:bg-blue-600 text-white"
+              onClick={() => {
+                if (whatIFStatus === true) {
+                  setAllData(data);
+                  setAssignmentsAdded(0);
+                }
+                setWhatIFStatus((e) => !e);
+              }}
+            >
+              {whatIFStatus ? "Disable What If" : "Enable What If"}
+            </button>
+          </div>
+          {whatIFStatus ? (
+            <>
+              <div className="w-full flex items-center justify-center">
+                <button
+                  className="mb-10 text-lg bg-primary px-4 py-2 rounded-3xl hover:bg-blue-800 transition-all duration-300 active:bg-blue-600 text-white"
+                  onClick={addNewAOL}
+                >
+                  Add a new Assessment of Learning
+                </button>
+              </div>
+              <p className="mb-10 text-lg px-4 py-2 text-center dark:text-gray-400 text-gray-600">
+                You can click on the title of the assignment and press enter to
+                change its name!
+              </p>
+            </>
+          ) : null}
+
+          <div className="flex flex-col gap-5">
+            {allData?.assignmentData?.length
+              ? allData.assignmentData
+                  .slice(1)
+                  .map((e, i) => (
+                    <AssignmentItem
+                      data={e}
+                      allData={allData}
+                      setAllData={setAllData}
+                      key={e[10] ? e[10] : i - assignmentsAdded}
+                      updateModalStatus={updateModalStatus}
+                      id={i}
+                      whatIF={whatIFStatus}
+                    />
+                  ))
+              : "There are no assignments to show at this time."}
+          </div>
+        </section>
+      </div>
     </motion.div>
   );
 }
