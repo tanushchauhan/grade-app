@@ -48,6 +48,84 @@ function giveGPAs(periodObj) {
   return { sum, numSum };
 }
 
+function getGPA() {
+  let transData = {};
+  let currData = {};
+  let currPer = -1;
+  if (typeof window !== "undefined") {
+    transData = JSON.parse(sessionStorage.getItem("trans"));
+    currData = JSON.parse(sessionStorage.getItem("data"));
+    currPer = JSON.parse(sessionStorage.getItem("perCurrPeriod"));
+  }
+
+  let sumNumGPA = 0;
+
+  for (let p = 1; p < Object.keys(transData).length; p++) {
+    for (let r = 1; r < transData[p]["transPerGradeData2"].length; r++) {
+      if (
+        transData[p]["transPerGradeData2"][r][2] !== "" &&
+        transData[p]["transPerGradeData2"][r][2] !== "P" &&
+        transData[p]["transPerGradeData2"][r][0].substring(0, 2) !== "EA"
+      )
+        sumNumGPA++;
+      if (
+        transData[p]["transPerGradeData2"][r][3] !== "" &&
+        transData[p]["transPerGradeData2"][r][3] !== "P" &&
+        transData[p]["transPerGradeData2"][r][0].substring(0, 2) !== "EA"
+      )
+        sumNumGPA++;
+    }
+  }
+  let currGPA = Number(transData["transPerRankData"][1][1]);
+  let sumAllGPA = currGPA * sumNumGPA;
+  let sumToAdd = 0;
+  let numSumToAdd = 0;
+  if (currPer === 2) {
+    const { sum: sum1, numSum: numSum1 } = giveGPAs(currData[1]);
+    sumToAdd += sum1;
+    numSumToAdd += numSum1;
+    const { sum: sum2, numSum: numSum2 } = giveGPAs(currData[2]);
+    sumToAdd += sum2;
+    numSumToAdd += numSum2;
+  } else if (currPer === 4) {
+    const { sum: sum1, numSum: numSum1 } = giveGPAs(currData[3]);
+    sumToAdd += sum1;
+    numSumToAdd += numSum1;
+    const { sum: sum2, numSum: numSum2 } = giveGPAs(currData[4]);
+    sumToAdd += sum2;
+    numSumToAdd += numSum2;
+  } else if (currPer === 3) {
+    const { sum: sum1, numSum: numSum1 } = giveGPAs(currData[3]);
+    sumToAdd += sum1;
+    numSumToAdd += numSum1;
+  } else {
+    const { sum: sum1, numSum: numSum1 } = giveGPAs(currData[1]);
+    sumToAdd += sum1;
+    numSumToAdd += numSum1;
+  }
+
+  sumAllGPA += sumToAdd;
+  sumNumGPA += numSumToAdd;
+  const last = Math.round((sumAllGPA / sumNumGPA) * 1000) / 1000;
+  return last;
+}
+
+const func = async (setCurrentData) => {
+  const latestPeriod =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("perCurrPeriod")
+      : null;
+  const token = getCookie("token");
+  let currData =
+    typeof window !== "undefined"
+      ? JSON.parse(sessionStorage.getItem(`data`))
+      : null;
+  const dataToSend = {
+    token,
+    options: { onlyGPA: true, limGPA: latestPeriod },
+  };
+};
+
 function GpaVal() {
   return <div></div>;
 }
