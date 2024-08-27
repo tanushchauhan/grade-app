@@ -124,10 +124,61 @@ const func = async (setCurrentData) => {
     token,
     options: { onlyGPA: true, limGPA: latestPeriod },
   };
+  try {
+    const res = await fetch("/api/hac/courses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
+    });
+
+    const resData = await res.json();
+    if (!resData.success) {
+      throw Error("Something went wrong!");
+    }
+    if (typeof window !== "undefined") {
+      currData = { ...currData, ...resData.data };
+      sessionStorage.setItem("data", JSON.stringify(currData));
+      sessionStorage.setItem("trans", JSON.stringify(resData.transData));
+    }
+  } catch (e) {
+    console.error(e);
+    router.push("/error");
+  }
+  try {
+    const val = getGPA();
+    return val;
+  } catch (e) {
+    console.error(e);
+    return "Not able to set";
+  } finally {
+    const data =
+      typeof window !== "undefined"
+        ? JSON.parse(sessionStorage.getItem("data"))
+        : null;
+    const per =
+      typeof window !== "undefined"
+        ? Number(sessionStorage.getItem("currPeriod"))
+        : null;
+    setCurrentData(data[per]);
+  }
 };
 
-function GpaVal() {
-  return <div></div>;
+function GpaVal({ setCurrentData }) {
+  const { data, isFetching } = useQuery({
+    queryKey: ["gpa"],
+    queryFn: () => func(setCurrentData),
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+
+  return (
+    <div>
+      <p className="text-6xl mt-6 bg-gradient-to-r from-blue-600 dark:via-indigo-300 via-indigo-900 dark:to-[#4A6CF7] to-[#4A6CF7] inline-block text-transparent bg-clip-text font-bold my-7">
+        {isFetching ? loadingSVG : data}
+      </p>
+    </div>
+  );
 }
 
 export default GpaVal;
