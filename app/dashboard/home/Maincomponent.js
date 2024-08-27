@@ -104,6 +104,100 @@ function Maincomponent() {
   const [loading, setLoading] = useState(initialValLoading);
 
   const queryClient = useQueryClient();
+
+  const { gpaTimeChanged, updateGpaTimeChanged, updateChangeTheHeader } =
+    useContext(globalContext);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    async function runThis() {
+      if (!hasCookie("token")) {
+        router.push("/signin");
+      } else if (!sessionStorage.getItem("data")) {
+        const options = { onlyPeriod: false, periodNumNeeded: null };
+        const token = getCookie("token");
+        const dataToSend = { token, options };
+        const res = await fetch("/api/hac/courses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataToSend),
+        });
+
+        try {
+          let data = await res.json();
+          if (!data.success) {
+            deleteCookie("token");
+            router.push("/signin");
+            return;
+          } else {
+            const perNum = data.periodNumber;
+            const dataToStore = {};
+            dataToStore[`${perNum}`] = data;
+            sessionStorage.setItem(`data`, JSON.stringify(dataToStore));
+            sessionStorage.setItem("currPeriod", perNum);
+            sessionStorage.setItem("perCurrPeriod", perNum);
+            updateChangeTheHeader(true);
+            let initialData = {};
+            let initialPeriod;
+            initialData = JSON.parse(sessionStorage.getItem(`data`));
+            initialPeriod = sessionStorage.getItem("currPeriod");
+            setCurrentData(initialData[initialPeriod]);
+            setLoading(false);
+            if (data.studentName === "Demo User") {
+              toast(
+                "You are using the Demo Account!\nGrades would be same accross marking periods.",
+                {
+                  icon: "😀",
+                  style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#fff",
+                  },
+                }
+              );
+            }
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+          deleteCookie("token");
+          router.push("/signin");
+          return;
+        }
+      } else {
+        if (!loading) return;
+        let initialData = {};
+        let initialPeriod;
+        initialData = JSON.parse(sessionStorage.getItem(`data`));
+        initialPeriod = sessionStorage.getItem("currPeriod");
+        setCurrentData(initialData[initialPeriod]);
+        updateUserName(initialData[initialPeriod].studentName);
+        setLoading(false);
+      }
+    }
+    runThis();
+  }, [router, loading, updateChangeTheHeader]);
+
+  function handleRefetchClick() {
+    if (gpaTimeChanged === 0) {
+      queryClient.invalidateQueries(["gpa"]);
+      updateGpaTimeChanged(queryClient.getQueryState(["gpa"]).dataUpdateCount);
+    } else {
+      const x = queryClient.getQueryState(["gpa"]);
+      if (gpaTimeChanged === x.dataUpdateCount) {
+        return;
+      } else {
+        queryClient.invalidateQueries(["gpa"]);
+        updateGpaTimeChanged(
+          queryClient.getQueryState(["gpa"]).dataUpdateCount
+        );
+      }
+    }
+  }
+
   return <div></div>;
 }
 
