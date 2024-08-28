@@ -1,8 +1,13 @@
 "use client";
 
 import { globalContext } from "@/app/providers";
+import ThemeToggler from "@/components/Header/ThemeToggler";
+import { deleteCookie } from "cookies-next";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+
+import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
   CircularProgressbarWithChildren,
