@@ -2,8 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Loader from "@/components/ui/Loader";
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import GpaVal from "./GpaVal";
+import { useQueryClient } from "@tanstack/react-query";
+import { globalContext } from "../../providers";
+import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 
 function GradeCard({ data, periodNumber, setCurrentView }) {
@@ -83,7 +88,7 @@ const reloadIcon = (
   </svg>
 );
 
-function Maincomponent() {
+function Maincomponent({ setCurrentView }) {
   const router = useRouter();
   const periodNumSelector = useRef();
   const [isLoading, setIsLoading] = useState(false);
@@ -184,23 +189,6 @@ function Maincomponent() {
     runThis();
   }, [router, loading, updateChangeTheHeader]);
 
-  function handleRefetchClick() {
-    if (gpaTimeChanged === 0) {
-      queryClient.invalidateQueries(["gpa"]);
-      updateGpaTimeChanged(queryClient.getQueryState(["gpa"]).dataUpdateCount);
-    } else {
-      const x = queryClient.getQueryState(["gpa"]);
-      if (gpaTimeChanged === x.dataUpdateCount) {
-        return;
-      } else {
-        queryClient.invalidateQueries(["gpa"]);
-        updateGpaTimeChanged(
-          queryClient.getQueryState(["gpa"]).dataUpdateCount
-        );
-      }
-    }
-  }
-
   async function mainRefetch() {
     if (mainReloadBtn) return;
     if (!isLoading) setIsLoading(true);
@@ -289,6 +277,23 @@ function Maincomponent() {
       console.log(e);
       setIsLoading(false);
       router.push("/error");
+    }
+  }
+
+  function handleRefetchClick() {
+    if (gpaTimeChanged === 0) {
+      queryClient.invalidateQueries(["gpa"]);
+      updateGpaTimeChanged(queryClient.getQueryState(["gpa"]).dataUpdateCount);
+    } else {
+      const x = queryClient.getQueryState(["gpa"]);
+      if (gpaTimeChanged === x.dataUpdateCount) {
+        return;
+      } else {
+        queryClient.invalidateQueries(["gpa"]);
+        updateGpaTimeChanged(
+          queryClient.getQueryState(["gpa"]).dataUpdateCount
+        );
+      }
     }
   }
 
@@ -413,8 +418,56 @@ function Maincomponent() {
           </span>
         </div>
       </section>
+      <div className="container mb-10">
+        <div className="mb-10 lg:mt-0 mt-10 flex items-start justify-center flex-col gap-8 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
+          <div>
+            <span className="text-xl font-semibold">Marking Period: </span>
+            <select
+              className=" bg-slate-100 dark:bg-slate-700 px-8 py-1 text-lg rounded-lg"
+              ref={periodNumSelector}
+              onChange={handleChange}
+              value={currentData?.periodNumber}
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+            <div className="mt-3 text-xl text-slate-400">
+              Click each subject for more info
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                setMainReloadBtn(true);
+                mainRefetch();
+              }}
+            >
+              {mainReloadBtn ? loadingSVG : reloadIcon}
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-col-1 md:grid-cols-2 md:gap-x-6 lg:grid-cols-1 lg:gap-x-0 gap-y-6">
+          {currentData?.data?.map((e) => (
+            <GradeCard
+              data={e}
+              key={e.courseCode}
+              periodNumber={currentData?.periodNumber}
+              setCurrentView={setCurrentView}
+            />
+          ))}
+        </div>
+        <div className="mt-10 p-8 dark:bg-slate-800 bg-gray-light">
+          <h2 className="text-3xl">GPA</h2>
+          <h2 className="text-2xl mt-2 text-slate-400">Predicted Weighted</h2>
+          <GpaVal setCurrentData={setCurrentData} />
+          <button className="block" onClick={handleRefetchClick}>
+            {reloadIcon}
+          </button>
+        </div>
+      </div>
     </motion.div>
   );
 }
-
 export default Maincomponent;
