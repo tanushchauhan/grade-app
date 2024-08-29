@@ -2249,7 +2249,7 @@ export async function POST(req, res) {
   let storeData;
   let studentName;
   const url = "https://hac.friscoisd.org/homeaccess/";
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   try {
     await page.setUserAgent(

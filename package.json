@@ -9,15 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/swc-darwin-arm64": "^14.2.7",
     "@tanstack/query-sync-storage-persister": "^5.51.24",
     "@tanstack/react-query": "^5.51.24",
     "@tanstack/react-query-devtools": "^5.51.24",
     "@tanstack/react-query-persist-client": "^5.51.24",
     "cookies-next": "^4.2.1",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.3.28",
     "next": "14.2.5",
     "next-themes": "^0.3.0",
     "node-rsa": "^1.1.1",
+    "puppeteer": "^23.2.0",
     "react": "^18",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18",

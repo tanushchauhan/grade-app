@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Logo]()
 
-## Getting Started
+# GradeMate
 
-First, run the development server:
+This is a grade app that I made as a wrapper of the Home Access Center of Frisco ISD. This has a better UI and more features compared to HAC.
+
+## Run Locally
+
+If you want you can run the application locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/tanushchauhan/grade-app.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+  cd grade-app
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Install dependencies
 
-## Learn More
+```bash
+  npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Build the project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+  npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Start the server
 
-## Deploy on Vercel
+```bash
+  npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Authors
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [@tanushchauhan](https://www.github.com/tanushchauhan)
+
+## Demo
+
+You can go to the [here](https://grademate.tanushchauhan.com/) and login with the demo account using the credentials on the login page in order to experience the application.
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`PUBKEY`
+
+`PRIKEY`
+
+They should be a public and private key pair which you can generate using the node-rsa module. This is used to encrypt the credientials between client and the server and generate a special token for each user.
