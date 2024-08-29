@@ -55,3 +55,7 @@ To run this project, you will need to add the following environment variables to
 `PRIKEY`
 
 They should be a public and private key pair which you can generate using the node-rsa module. This is used to encrypt the credientials between client and the server and generate a special token for each user.
+
+## Credit
+
+I have used an open-sourced template to start off the UI of this application. The template can be found [here](https://github.com/NextJSTemplates/startup-nextjs).
