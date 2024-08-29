@@ -1,4 +1,4 @@
-![Logo]()
+![Logo](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/public/grademate_logo.png)
 
 # GradeMate
 
