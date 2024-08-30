@@ -59,3 +59,21 @@ They should be a public and private key pair which you can generate using the no
 ## Credit
 
 I have used an open-sourced template to start off the UI of this application. The template can be found [here](https://github.com/NextJSTemplates/startup-nextjs).
+
+## Screenshots
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/1.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/2.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/3.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/4.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/5.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/6.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/7.png)
+
+![App Screenshot](https://raw.githubusercontent.com/tanushchauhan/grade-app/main/screenshots/8.png)
