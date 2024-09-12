@@ -1,6 +1,3 @@
-import puppeteer from "puppeteer";
-import NodeRSA from "node-rsa";
-
 const classes = {
   CATE00210: {
     name: "Survey of Agriculture Food & Natural Resources",
@@ -2192,88 +2189,6 @@ const classes = {
   },
 };
 
-export async function GET() {
-  return Response.json({ success: false, error: "Invaild method" });
-}
-
-export async function POST(req, res) {
-  const { token, options } = await req.json();
-  const decrypter = new NodeRSA(process.env.PRIKEY);
-  const [username, password] = decrypter.decrypt(token, "utf8").split(" % ");
-  if (options.getUpAssign) {
-    const url = "https://hac.friscoisd.org/homeaccess/";
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    try {
-      await page.setUserAgent(
-        "Mozilla/5.0 (X11; Linux x86_64)" +
-          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36"
-      );
-      await page.goto(url);
-      await page.evaluate(
-        (username, password) => {
-          document.querySelector("#LogOnDetails_UserName").value = username;
-          document.querySelector("#LogOnDetails_Password").value = password;
-        },
-        username,
-        password
-      );
-      await page.click(".sg-submit-button");
-      await page.waitForSelector(
-        ".sg-banner-menu-element.sg-menu-element-identity",
-        { timeout: 5000 }
-      );
-      await page.goto("https://hac.friscoisd.org/HomeAccess/Home/Calendar");
-      await page.waitForSelector(".sg-calendar-event");
-      const filteredArray = await page.$$eval("script", (scripts) =>
-        JSON.parse(
-          scripts
-            .map((src) => src.innerHTML)
-            .filter((el) => el.includes("calendarEvents"))[0]
-            .split("\n")
-            .filter((el) => el.includes("calendarEvents"))[0]
-            .replace(/this.data\W=\W|;$/gm, "")
-            .trim()
-            .slice(20)
-        )
-      );
-
-      const dataToSend = filteredArray.AssignmentCourses.map((e) => {
-        const title = e.Key.TooltipTitle;
-        const date = JSON.parse(
-          e.Key.TooltipDueDate.slice(6, e.Key.TooltipDueDate.length - 2)
-        );
-        const category = e.Key.TooltipCategory;
-        let name = e.Key.Course;
-        if (classes[e.Key.Course.slice(0, 8)]) {
-          name = classes[e.Key.Course.slice(0, 8)].name;
-        } else if (classes[e.Key.Course]) {
-          name = classes[e.Key.Course].name;
-        }
-        return { title, category, date, name };
-      });
-
-      return Response.json({ success: true, data: dataToSend });
-    } catch (e) {
-      if (
-        await page.evaluate(() => {
-          try {
-            return document.querySelector(".validation-summary-errors")
-              .outerHTML;
-          } catch {
-            return undefined;
-          }
-        })
-      ) {
-        return Response.json({ success: false, wrongPas: true });
-      } else {
-        console.log(e);
-      }
-      return Response.json({ success: false, wrongPas: false });
-    } finally {
-      await page.goto("https://hac.friscoisd.org/HomeAccess/Account/Logoff");
-      await page.waitForSelector(".caption");
-      await browser.close();
-    }
-  }
+export default function getCouseWeight(code) {
+  return classes[code];
 }

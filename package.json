@@ -14,6 +14,9 @@
     "@tanstack/react-query": "^5.51.24",
     "@tanstack/react-query-devtools": "^5.51.24",
     "@tanstack/react-query-persist-client": "^5.51.24",
+    "axios": "^1.7.7",
+    "axios-cookiejar-support": "^5.0.2",
+    "cheerio": "^1.0.0",
     "cookies-next": "^4.2.1",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.3.28",
@@ -25,7 +28,8 @@
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
-    "react-modal-video": "^2.0.2"
+    "react-modal-video": "^2.0.2",
+    "tough-cookie": "^4.1.4"
   },
   "devDependencies": {
     "eslint": "^8",
