@@ -20,7 +20,6 @@ function Form() {
   }, [router]);
 
   async function handleQuery({ username, password, isChecked }) {
-    const options = { onlyPeriod: false, periodNumNeeded: null };
     setBtnText(
       <svg
         className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -45,17 +44,17 @@ function Form() {
     );
     const preToken = username + " % " + password;
     const token = await encCreds(preToken);
-    const dataToSend = { token, options };
-    const res = await fetch("/api/hac/courses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dataToSend),
-    });
+    const res1 = await fetch(
+      `/api/hac/v2/studentinfo?username=${username}&password=${password}`
+    );
+    const res2 = await fetch(
+      `/api/hac/v2/classes?username=${username}&password=${password}`
+    );
     try {
-      let data = await res.json();
-      if (!data.success) {
-        if (data.wrongPas) {
-          setError("The username and password does not match!");
+      let data1 = await res1.json();
+      if (data1.error) {
+        if (data1.error == "Incorrect username or password") {
+          setError("Incorrect username or password");
           setBtnText("Sign in");
           return;
         } else {
@@ -80,11 +79,13 @@ function Form() {
             sameSite: true,
           });
         }
+        let data2 = await res2.json();
         if (typeof window !== "undefined" && window.sessionStorage) {
-          const perNum = data.periodNumber;
+          const perNum = data2.periodNumber;
           const dataToStore = {};
-          data.id = username;
-          dataToStore[`${perNum}`] = data;
+          data2.id = username;
+          data2.studentName = data1.name;
+          dataToStore[`${perNum}`] = data2;
           sessionStorage.setItem(`data`, JSON.stringify(dataToStore));
           sessionStorage.setItem("currPeriod", perNum);
           sessionStorage.setItem("perCurrPeriod", perNum);
@@ -92,19 +93,19 @@ function Form() {
         setBtnText("Sign in");
         updateChangeTheHeader(true);
         router.push("/dashboard");
-        if (data.studentName === "Demo User") {
-          toast(
-            "You are using the Demo Account!\nGrades would be same accross marking periods.",
-            {
-              icon: "😀",
-              style: {
-                borderRadius: "10px",
-                background: "#333",
-                color: "#fff",
-              },
-            }
-          );
-        }
+        //   if (data.studentName === "Demo User") {
+        //     toast(
+        //       "You are using the Demo Account!\nGrades would be same accross marking periods.",
+        //       {
+        //         icon: "😀",
+        //         style: {
+        //           borderRadius: "10px",
+        //           background: "#333",
+        //           color: "#fff",
+        //         },
+        //       }
+        //     );
+        //   }
         return;
       }
     } catch (e) {
@@ -153,6 +154,7 @@ function Form() {
           name="username"
           placeholder="Enter your Username"
           className="w-full rounded-sm border border-stroke bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+          defaultValue="297425"
           disabled={btnText !== "Sign in"}
         />
       </div>
@@ -168,6 +170,7 @@ function Form() {
           name="password"
           placeholder="Enter your Password"
           className="w-full rounded-sm border border-stroke bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
+          defaultValue="Tiger@425297"
           disabled={btnText !== "Sign in"}
         />
       </div>

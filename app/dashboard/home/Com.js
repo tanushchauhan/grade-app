@@ -65,10 +65,10 @@ function AssignmentItem({
     if (Number(e.target.value) > 999 || e.target.value.length > 3) {
       return;
     }
-    let assignmentData = JSON.parse(JSON.stringify(allData.assignmentData));
-    assignmentData[id + 1][4] = e.target.value;
+    let assignments = JSON.parse(JSON.stringify(allData.assignments));
+    assignments[id + 1][4] = e.target.value;
     setAllData((f) => {
-      return { ...f, assignmentData };
+      return { ...f, assignments };
     });
     setInputData(e.target.value);
   }
@@ -167,9 +167,11 @@ function Com({ params }) {
   const code = params.id.substring(0, params.id.length - 1);
   let data;
   try {
-    data = store[perNum].data.filter((e) => e.courseCode === code)[0];
-  } catch {
+    data = store[perNum].classes.filter((e) => e.code === code)[0];
+    console.log(data);
+  } catch (e) {
     data = null;
+    console.log(e.message);
   }
 
   const [allData, setAllData] = useState(data);
@@ -181,13 +183,13 @@ function Com({ params }) {
   function calculateOverAll() {
     let studentOverallGrade;
     try {
-      const count = allData?.assignmentData?.filter((e) => {
-        if (e[3] === "Assessment of Learning") {
-          if (e[4].trim() === "") {
+      const count = allData?.assignments?.filter((e) => {
+        if (e.category === "Assessment of Learning") {
+          if (e.score.trim() === "") {
             return false;
-          } else if (e[4] === "L" || Number(e[4]) === 0) {
+          } else if (e.score.substring(0, 1) === "L" || Number(e.score) === 0) {
             return true;
-          } else if (!Number(e[4])) {
+          } else if (!Number(e.score)) {
             return false;
           } else {
             return true;
@@ -197,14 +199,17 @@ function Com({ params }) {
         }
       }).length;
 
-      const sum = allData?.assignmentData
+      const sum = allData?.assignments
         .filter((e) => {
-          if (e[3] === "Assessment of Learning") {
-            if (e[4].trim() === "") {
+          if (e.category === "Assessment of Learning") {
+            if (e.score.trim() === "") {
               return false;
-            } else if (e[4] === "L" || Number(e[4]) === 0) {
+            } else if (
+              e.score.substring(0, 1) === "L" ||
+              Number(e.score) === 0
+            ) {
               return true;
-            } else if (!Number(e[4])) {
+            } else if (!Number(e.score)) {
               return false;
             } else {
               return true;
@@ -214,7 +219,7 @@ function Com({ params }) {
           }
         })
         .reduce((acc, e) => {
-          if (!Number(e[4]) && Number(e[4]) !== 0) {
+          if (!Number(e.score) && Number(e.score) !== 0) {
             return acc;
           } else {
             return acc + Number(e[4]);
@@ -227,6 +232,8 @@ function Com({ params }) {
         studentOverallGrade = 0;
       }
     } catch (e) {
+      console.error(e);
+      console.log(allData);
       studentOverallGrade = 0;
     }
     return studentOverallGrade;
@@ -240,13 +247,16 @@ function Com({ params }) {
     function calculateOverAllAndUpdate() {
       let studentOverallGrade;
       try {
-        const count = allData?.assignmentData?.filter((e) => {
-          if (e[3] === "Assessment of Learning") {
-            if (e[4].trim() === "") {
+        const count = allData?.assignments?.filter((e) => {
+          if (e.category === "Assessment of Learning") {
+            if (e.score.trim() === "") {
               return false;
-            } else if (e[4] === "L" || Number(e[4]) === 0) {
+            } else if (
+              e.score.substring(0, 1) === "L" ||
+              Number(e.score) === 0
+            ) {
               return true;
-            } else if (!Number(e[4])) {
+            } else if (!Number(e.score)) {
               return false;
             } else {
               return true;
@@ -256,14 +266,17 @@ function Com({ params }) {
           }
         }).length;
 
-        const sum = allData?.assignmentData
+        const sum = allData?.assignments
           .filter((e) => {
-            if (e[3] === "Assessment of Learning") {
-              if (e[4].trim() === "") {
+            if (e.category === "Assessment of Learning") {
+              if (e.score.trim() === "") {
                 return false;
-              } else if (e[4] === "L" || Number(e[4]) === 0) {
+              } else if (
+                e.score.substring(0, 1) === "L" ||
+                Number(e.score) === 0
+              ) {
                 return true;
-              } else if (!Number(e[4])) {
+              } else if (!Number(e.score)) {
                 return false;
               } else {
                 return true;
@@ -273,7 +286,7 @@ function Com({ params }) {
             }
           })
           .reduce((acc, e) => {
-            if (!Number(e[4]) && Number(e[4]) !== 0) {
+            if (!Number(e.score) && Number(e.score) !== 0) {
               return acc;
             } else {
               return acc + Number(e[4]);
@@ -303,26 +316,21 @@ function Com({ params }) {
     document.querySelector("html").classList.toggle("overflow-hidden");
 
     if (status) {
-      setModalData(data.assignmentData[id + 1]);
+      setModalData(data.assignments[id + 1]);
     }
     setShowModal(status);
   }
 
   function addNewAOL() {
     setAllData((e) => {
-      e.assignmentData.splice(1, 0, [
-        "Today",
-        "Today",
-        "New Assignment",
-        "Assessment of Learning",
-        "",
-        "100.00",
-        "1.00",
-        " ",
-        "100.00",
-        " ",
-        Date.now(),
-      ]);
+      e.assignments.splice(1, 0, {
+        name: "New Assignment",
+        category: "Assessment of Learning",
+        dateAssigned: "",
+        dateDue: Date.now(),
+        score: "",
+        totalPoints: "100.00",
+      });
 
       return e;
     });
@@ -375,30 +383,36 @@ function Com({ params }) {
                         Type of Assignment
                       </p>
                       <p className="text-xl  text-slate-100 font-semibold text-center">
-                        {modalData[3]}
+                        {modalData.category}
                       </p>
                     </div>
                     <div className="grid grid-cols-2 gap-x-8 gap-y-4 my-2">
                       <div className="flex items-center flex-col gap-2 justify-center bg-primary p-3 rounded-3xl">
                         <p className="font-bold text-center">Date Assigned</p>
                         <p className="text-xl  text-slate-100 font-semibold text-center">
-                          {modalData[1].trim() === "" ? "None" : modalData[1]}
+                          {modalData.dateAssigned.trim() === ""
+                            ? "None"
+                            : modalData.dateAssigned}
                         </p>
                       </div>
                       <div className="flex items-center flex-col gap-2 justify-center bg-primary p-3 rounded-3xl">
                         <p className="font-bold text-center">Date Due</p>
                         <p className="text-xl  text-slate-100 font-semibold text-center">
-                          {modalData[0].trim() === "" ? "None" : modalData[0]}
+                          {modalData.dateDue.trim() === ""
+                            ? "None"
+                            : modalData.dateDue}
                         </p>
                       </div>
                       <div className="flex items-center flex-col gap-2 justify-center bg-primary p-3 rounded-3xl">
                         <p className="font-bold text-center">Score</p>
                         <p className="text-xl  text-slate-100 font-semibold text-center">
-                          {modalData[4].trim() === "" ? "None" : modalData[4]} /{" "}
-                          {modalData[5]}
+                          {modalData.score.trim() === ""
+                            ? "None"
+                            : modalData.score}{" "}
+                          / {modalData.totalPoints}
                         </p>
                       </div>
-                      <div className="flex items-center flex-col gap-2 justify-center bg-primary p-3 rounded-3xl">
+                      {/* <div className="flex items-center flex-col gap-2 justify-center bg-primary p-3 rounded-3xl">
                         <p className="font-bold text-center">Weighted Points</p>
                         <p className="text-xl  text-slate-100 font-semibold text-center">
                           {modalData[7].trim() === "" ? "None" : modalData[7]} /{" "}
@@ -416,7 +430,7 @@ function Com({ params }) {
                         <p className="text-xl  text-slate-100 font-semibold text-center">
                           {Number(modalData[9]) ? Number(modalData[9]) : "0.0"}%
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -432,7 +446,7 @@ function Com({ params }) {
             <div className="w-full px-4 md:w-8/12 lg:w-7/12">
               <div className="mb-8 max-w-[570px] md:mb-0 lg:mb-12">
                 <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                  {data?.courseName}
+                  {data?.name}
                 </h1>
 
                 <button
@@ -620,8 +634,8 @@ function Com({ params }) {
           ) : null}
 
           <div className="flex flex-col gap-5">
-            {allData?.assignmentData?.length
-              ? allData.assignmentData
+            {allData?.assignments?.length
+              ? allData.assignments
                   .slice(1)
                   .map((e, i) => (
                     <AssignmentItem

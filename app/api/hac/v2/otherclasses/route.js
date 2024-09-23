@@ -1,5 +1,7 @@
 import * as cheerio from "cheerio";
 import getRequestSession from "../helpers/getsession";
+import getCouseWeight from "../helpers/getCouseWeight";
+import demoAcc from "./demoAcc";
 
 export async function GET(request) {
   try {
@@ -24,6 +26,13 @@ export async function GET(request) {
         }),
         { status: 400 }
       );
+    }
+
+    if (username == "demo" && password == "demo") {
+      return new Response(JSON.stringify(demoAcc), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Function to simulate getRequestSession (you need to implement this)
@@ -129,6 +138,27 @@ export async function GET(request) {
     $(".AssignmentClass").each(parseClass);
     // ------Formating the courses and adding weights------
     for (let i = 0; i < courses.length; i++) {
+      courses[i].grade = Number(courses[i].grade);
+      for (let w = 0; w < courses[i].assignments.length; w++) {
+        if (
+          (Number(courses[i].assignments[w].score) ||
+            Number(courses[i].assignments[w].score) == 0) &&
+          courses[i].assignments[w].score !== ""
+        ) {
+          courses[i].assignments[w].score = String(
+            Number(courses[i].assignments[w].score)
+          );
+        }
+        if (
+          (Number(courses[i].assignments[w].totalPoints) ||
+            Number(courses[i].assignments[w].totalPoints) == 0) &&
+          courses[i].assignments[w].totalPoints !== ""
+        ) {
+          courses[i].assignments[w].totalPoints = String(
+            Number(courses[i].assignments[w].totalPoints)
+          );
+        }
+      }
       if (courses[i].assignments.length !== 0) {
         courses[i].assignments.splice(courses[i].assignments.length - 2);
       }
@@ -162,10 +192,13 @@ export async function GET(request) {
       }
     }
     // --------------------------------
-    return new Response(JSON.stringify({ otherClasses: courses }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ otherClasses: courses, periodNumber: Number(mp) }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     console.error("Error:", error);
     return new Response(JSON.stringify({ error: "Something went wrong" }), {

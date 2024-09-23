@@ -1550,6 +1550,11 @@ const classes = {
     weight: 6.0,
     multiplier: 1,
   },
+  SST71000: {
+    name: "GT Amer Studies/AP US Hist S1",
+    weight: 6.0,
+    multiplier: 1,
+  },
   SST23100: {
     name: "US History",
     weight: 5.0,

@@ -66,7 +66,7 @@ async function getRequestSession(username, password) {
 
     $ = cheerio.load(l.data);
 
-    const errorText = "We are unable to log you into HAC at this time.";
+    const errorText = "Your attempt to log in was unsuccessful.";
     const bodyText = $("body").text(); // Get all the text from the body
 
     if (bodyText.includes(errorText)) {

@@ -74,7 +74,11 @@ export async function GET(req) {
         const sem2Grade = courseInfo.eq(3).text().trim();
         const finalGrade = courseInfo.eq(4).text().trim();
         const courseCredits = courseInfo.eq(5).text().trim();
-
+        const shouldAdd =
+          courseCode.substring(0, 2) !== "EA" &&
+          (Number(sem1Grade) || Number(sem2Grade))
+            ? true
+            : false;
         courseDetails.push({
           courseCode,
           courseName,
@@ -82,6 +86,7 @@ export async function GET(req) {
           sem2Grade,
           finalGrade,
           courseCredits,
+          shouldAdd,
         });
       });
 

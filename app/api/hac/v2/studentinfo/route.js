@@ -1,5 +1,6 @@
 import { load } from "cheerio";
 import getRequestSession from "../helpers/getsession";
+import demoAcc from "./demoAcc";
 
 export async function GET(req) {
   // Extract the query parameters from the request URL
@@ -14,6 +15,12 @@ export async function GET(req) {
     );
   }
 
+  if (username == "demo" && password == "demo") {
+    return new Response(JSON.stringify(demoAcc), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   try {
     // Get the session using the helper function
     const session = await getRequestSession(username, password);
