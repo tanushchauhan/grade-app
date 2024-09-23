@@ -1,5 +1,6 @@
 import { load } from "cheerio";
 import getRequestSession from "../helpers/getsession";
+import demoAcc from "./demoAcc";
 
 export async function GET(req) {
   // Extract the query parameters from the request URL
@@ -12,6 +13,13 @@ export async function GET(req) {
       JSON.stringify({ error: "Missing username or password" }),
       { status: 400, headers: { "Content-Type": "application/json" } }
     );
+  }
+
+  if (username == "demo" && password == "demo") {
+    return new Response(JSON.stringify(demoAcc), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   try {
