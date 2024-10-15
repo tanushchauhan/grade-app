@@ -159,9 +159,17 @@ export async function GET(request) {
           );
         }
       }
-      if (courses[i].assignments.length !== 0) {
-        courses[i].assignments.splice(courses[i].assignments.length - 2);
+
+      // removing the averages of AOLs and PGs
+      const tempAssignments = [];
+      for (let nm = 0; nm < courses[i].assignments.length; nm++) {
+        if (!(courses[i].assignments[nm]["name"] === "")) {
+          tempAssignments.push(courses[i].assignments[nm]);
+        }
       }
+      courses[i].assignments = tempAssignments;
+      // --------------------------------------
+
       let [courseCode, courseName] = courses[i].name.split(" - ");
       courseName = courseName.slice(1, courseName.length).trim();
       courseCode = courseCode.substring(0, 8);
