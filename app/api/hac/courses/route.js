@@ -2268,7 +2268,7 @@ export async function POST(req, res) {
     await page.click(".sg-submit-button");
     await page.waitForSelector(
       ".sg-banner-menu-element.sg-menu-element-identity",
-      { timeout: 5000 }
+      { timeout: 10000 }
     );
     studentName = await page.evaluate(() => {
       return document

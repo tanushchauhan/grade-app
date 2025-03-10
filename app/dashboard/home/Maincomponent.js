@@ -16,21 +16,23 @@ function GradeCard({ data, periodNumber, setCurrentView }) {
   return (
     <div
       className="w-25 h-25 border-blue-600 border-2 p-6 rounded-2xl cursor-pointer"
-      onClick={() => setCurrentView(`${data.code}${periodNumber}`)}
+      onClick={() => setCurrentView(`${data.courseCode}${periodNumber}`)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-y-0 gap-y-5 item-center justify-items-center">
         <div className="flex items-center justify-self-center lg:justify-items-start">
-          <h2 className="font-bold text-2xl ml-3 text-center">{data.name}</h2>
+          <h2 className="font-bold text-2xl ml-3 text-center">
+            {data.courseName}
+          </h2>
         </div>
         <div className="flex items-center">
           <h2 className="font-bold text-2xl ml-3 text-slate-500">
-            {data.code}
+            {data.courseCode}
           </h2>
         </div>
         <div className="flex items-center">
           <h2 className="font-bold text-2xl ml-3 text-slate-500 text-center">
-            {data.assignments?.length - 1 > 0
-              ? data.assignments?.length - 1
+            {data.assignmentData?.length - 1
+              ? data.assignmentData?.length - 1
               : 0}{" "}
             assignments
           </h2>
@@ -38,7 +40,7 @@ function GradeCard({ data, periodNumber, setCurrentView }) {
 
         <div className="ml-3">
           <p className=" text-6xl bg-gradient-to-r from-blue-600 dark:via-indigo-300 via-indigo-900 dark:to-[#4A6CF7] to-[#4A6CF7] inline-block text-transparent bg-clip-text font-bold">
-            {data.grade !== "" ? `${Number(data.grade)}%` : "0%"}
+            {data.studentGrade}%
           </p>
         </div>
       </div>
@@ -447,10 +449,10 @@ function Maincomponent({ setCurrentView }) {
           </div>
         </div>
         <div className="grid grid-col-1 md:grid-cols-2 md:gap-x-6 lg:grid-cols-1 lg:gap-x-0 gap-y-6">
-          {currentData?.classes?.map((e) => (
+          {currentData?.data?.map((e) => (
             <GradeCard
               data={e}
-              key={e.code}
+              key={e.courseCode}
               periodNumber={currentData?.periodNumber}
               setCurrentView={setCurrentView}
             />
